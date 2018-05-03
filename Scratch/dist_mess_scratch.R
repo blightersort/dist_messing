@@ -7,13 +7,26 @@ library(tidyverse)
 
 n_sim <- 10^6
 
+mean_targ <- 1e6
+cv_targ <- .5
 
-mean_log <- 12
-sd_log <- 1
+
+
+
+
+mean_log <- log(mean_targ) - log(cv_targ^2 + 1) / 2
+sd_log <- (cv_targ^2 + 1) %>% log() %>% sqrt()
 
 
 dist_sim <- rlnorm(n = n_sim, meanlog = mean_log, sdlog = sd_log) %>%
   list(x = .) %>% as_tibble()
+
+# mean test
+mean(dist_sim$x)
+
+# cv test
+sd(dist_sim$x)/mean(dist_sim$x)
+
 
 plot_mean_99var <- ggplot(data = dist_sim, aes(x = x, y = ..density..)) +
   geom_histogram(bins = 1000) + 
