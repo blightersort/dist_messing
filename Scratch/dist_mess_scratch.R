@@ -54,15 +54,23 @@ ggplot() + geom_density(data = dist_sim, aes(x = x, y = ..density..), color= "bl
   
 
 # ecdf returns a FUNCTION that computes the empirical cdf
-dens_fun <-  dist_sim$x %>%   ecdf()
-
+dens_fun <-  dist_sim$x %>% ecdf()
 
 # for tail fills
 # 1 for left tail, -1 for right
 # sign = ifelse(tail=="left", 1, -1)
-sign = 1
-dens_sim$tail = ifelse(sign*dens_sim$x < sign*threshold, densityframe$density, 0)
+sign = -1
 
+# threshold is the percentile we want
+threshold = dist_sim$x %>% quantile(x = ., probs = (.99))
+dens_sim$tail = ifelse(sign*dens_sim$x < sign*threshold, dens_sim$dens, 0)
+
+# area = switch(tail,
+#               left = densityfun(threshold),
+#               right= 1- densityfun(threshold)
+# )
+
+area = 1 - dens_fun(threshold)
 
 
 
