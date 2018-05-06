@@ -86,7 +86,7 @@ bracketsGrob <- function(...){
   l <- list(...)
   e <- new.env()
   e$l <- l
-  grid::grid.record(  {
+  grid:::recordGrob(  {
     do.call(grid.brackets, l)
   }, e)
 }
@@ -98,7 +98,7 @@ bracket1 <- bracketsGrob(x1 = 0.33,
                          y1 = 0.05, 
                          x2 = 0, 
                          y2 = 0.05,
-                         h = 0.05,
+                         h = -0.05,
                          lwd = 2,
                          col = "red"
                          )
