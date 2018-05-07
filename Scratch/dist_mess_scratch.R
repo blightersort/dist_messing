@@ -2,7 +2,7 @@
 
 library(tidyverse)
 library(grid)  # trying the brackets thing
-library(pBrackets)
+library(pBrackets) # makes brackets
 
 
 # Dist stuff ----
@@ -106,33 +106,26 @@ bracket1 <- bracketsGrob(x1 = 0.33,
 plot_mean_99var + 
   annotation_custom(bracket1)
 
-plot_mean_99var + annotation_custom(grid.brackets(x1 = 0.33,
- y1 = 0.05, 
- x2 = 0, 
- y2 = 0.05,
- h = 0.05,
- lwd = 2,
- col = "red"
-))
+# Bracket Position ----
+# Got the bracket to appear, can we position it.
+# This SO answer looks promising:
+# https://stackoverflow.com/questions/31690007/ggplot-drawing-line-between-points-across-facets
 
-# That didn't seem to work.
-# The answer had a link to a more basic answer, trying that:
-# https://stackoverflow.com/questions/7001799/ggplot2-curly-braces-on-an-axis/33544572#33544572
 
-plot_mean_99var
+# Idea is to grab the location of where we want the end points of the bracket in NPC notation.
 
-grid.locator(unit = "native") # captures location of mouse click on plot
+# This perofmrs the steps to render but doesn't render, so we can find the position of things.
+gb <- ggplot_build(plot_mean_99var)
 
-bottom_y <- 37
-grid.brackets(134, bottom_y, 206, bottom_y, lwd=2, col="red")
+# returns the grobs of an object that can then be manipulated
+g <- ggplot_gtable(gb)
 
-bottom_y <- 278
-grid.brackets(206, bottom_y, 134, bottom_y, lwd=2, col="red")
- 
-# put lower x first for bracket opening down, higher first for braket opening up.
 
-grid.brackets(206, bottom_y, 134, bottom_y + 20, lwd=2, col="red") 
+# this is pipeable but we need the gb object to extract the ranges
+# g <- plot_mean_99var %>%
+#   ggplot_build() %>%
+#   ggplot_gtable()
 
-# These units depend on size of output device. Resizing window makes them not line up correctly.
+
 
 
